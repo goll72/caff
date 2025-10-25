@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="@string/app_label"
+        android:icon="@mipmap/ic_launcher_round">
+        
+        <service
+            android:name=".CaffeineTileService"
+            android:exported="true"
+            android:label="@string/qs_tile_label"
+            android:icon="@drawable/local_cafe_outline"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        
+            <meta-data
+                android:name="android.service.quicksettings.TILE_CATEGORY"
+                android:value="android.service.quicksettings.CATEGORY_DISPLAY" />
+        </service>
+
+        <service android:name=".CaffeineService" android:exported="false" />
+    </application>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+</manifest>

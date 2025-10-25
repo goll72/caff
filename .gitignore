@@ -1,0 +1,7 @@
+.gradle
+.kotlin
+
+gradle.properties
+
+build
+app/build
