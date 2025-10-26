@@ -119,9 +119,10 @@ class CaffeineTileService : TileService() {
     
 
     private fun updateTile() {
+        qsTile.label = "Caffeine"
+
         if (caffeine.acquiredFor != null) {
-            qsTile.label = "Caffeine on"
-            qsTile.subtitle = getRemaining()?.toString() ?: "infinite"
+            qsTile.subtitle = getRemaining()?.toString() ?: "Infinite"
 
             qsTile.state = Tile.STATE_ACTIVE
             qsTile.icon = Icon.createWithResource(this, R.drawable.local_cafe_filled)
@@ -130,8 +131,7 @@ class CaffeineTileService : TileService() {
         } else {
             iter.reset()
                 
-            qsTile.label = "Caffeine off"
-            qsTile.subtitle = String()
+            qsTile.subtitle = "Off"
 
             qsTile.state = Tile.STATE_INACTIVE
             qsTile.icon = Icon.createWithResource(this, R.drawable.local_cafe_outline)
