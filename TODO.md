@@ -1,3 +1,6 @@
+ - [ ] Use `ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` to
+       prevent crashes from Android killing `CaffeineService`
+
  - [ ] Implement timeout when clicking on the quick settings
        tile to toggle caffeine rather than cycling through
        durations
