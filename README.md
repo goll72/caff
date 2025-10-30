@@ -1,7 +1,7 @@
-caff
+Caff
 ====
 
-caff is a minimal Android application that provides a quick settings tile
+Caff is a minimal Android application that provides a quick settings tile
 implementing Caffeine Mode functionality inspired by LineageOS so that it
 can be used on other Android operating systems.
 
