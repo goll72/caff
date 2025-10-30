@@ -51,6 +51,8 @@
             org.gradle.configuration-cache=true
             org.gradle.parallel=true
             org.gradle.caching=true
+
+            android.useAndroidX=true
   
             org.gradle.java.installations.paths=${jdk}/lib/openjdk
             android.aapt2FromMavenOverride=${androidHome}/build-tools/${mainBuildToolsVersion}/aapt2
@@ -69,12 +71,13 @@
             ];
 
             shellHook = ''
-              export ANDROID_HOME="${androidHome}"
+              export ANDROID_SDK_ROOT="${androidHome}"
               export ANDROID_NDK_ROOT="${androidHome}/ndk-bundle"
 
               export JAVA_HOME="${jdk}/lib/openjdk"
 
-              [ -f gradle.properties ] || ln -s ${gradleProperties} gradle.properties
+              ln -sf ${gradleProperties} gradle.properties
+              git update-index --skip-worktree gradle.properties
             '' + lib.optionalString (system != "x86_64-linux") ''
 
               export QEMU_LD_PREFIX="${pkgs-x86_64-linux.glibc}"
