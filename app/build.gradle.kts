@@ -40,10 +40,25 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "testkey"
+            keyPassword = "123456"
+            storeFile = file("testkey.jks")
+            storePassword = "123456"
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
+            isDebuggable = false
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt")
+            )
+
             signingConfig = signingConfigs.getByName("release")
         }
     }
