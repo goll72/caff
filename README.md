@@ -27,11 +27,6 @@ The APK will be available in `app/build/outputs/apk/`.
 
 ## Notes
 
-Since this is mostly for personal use, both `flake.nix`
-and `app/build.gradle.kts` only support the Android API
-level 36 (Android 16). If you want to support older
-releases, you will have to edit these two files.
-
 For the app to work properly in Android 12 or later, you
 will have to disable battery optimizations for the app
 (go to `App info` $\rightarrow$ `App battery usage` and
