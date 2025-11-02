@@ -51,9 +51,10 @@
             org.gradle.configuration-cache=true
             org.gradle.parallel=true
             org.gradle.caching=true
+            org.gradle.jvmargs=-Xmx1g -XX:MaxMetaspaceSize=512m
 
             android.useAndroidX=true
-  
+
             org.gradle.java.installations.paths=${jdk}/lib/openjdk
             android.aapt2FromMavenOverride=${androidHome}/build-tools/${mainBuildToolsVersion}/aapt2
           '';
@@ -78,6 +79,8 @@
 
               ln -sf ${gradleProperties} gradle.properties
               git update-index --skip-worktree gradle.properties
+
+              shopt -s globstar
             '' + lib.optionalString (system != "x86_64-linux") ''
 
               export QEMU_LD_PREFIX="${pkgs-x86_64-linux.glibc}"
