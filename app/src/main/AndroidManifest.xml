@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:label="@string/app_label"
-        android:icon="@mipmap/ic_launcher_round">
-        
+        android:icon="@mipmap/ic_launcher">
+
         <service
             android:name=".CaffeineTileService"
             android:exported="true"
@@ -21,7 +23,5 @@
         </service>
 
         <service android:name=".CaffeineService" android:exported="false" />
-    </application>
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 </manifest>
