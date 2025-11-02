@@ -136,8 +136,9 @@ private const val MAX_DURATION = 55 * 60
 private const val DURATION_STEP = 5 * 60
 
 
+@Composable
 private fun Modifier.ripple(): Modifier =
-    Modifier.indication(
+    this then Modifier.indication(
         remember { MutableInteractionSource() },
         androidx.compose.material3.ripple()
     )
