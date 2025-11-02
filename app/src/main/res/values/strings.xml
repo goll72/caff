@@ -2,4 +2,7 @@
 <resources>
     <string name="app_label">Caff</string>
     <string name="qs_tile_label">Caffeine</string>
+    <string name="qs_tile_off">Off</string>
+    <string name="qs_tile_infinite">Infinite</string>
+    <string name="act_prefs_label">Caff Preferences</string>
 </resources>
