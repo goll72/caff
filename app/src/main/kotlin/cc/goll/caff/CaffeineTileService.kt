@@ -183,7 +183,7 @@ class CaffeineTileService : TileService() {
     override fun onClick() {
         super.onClick()
 
-        if (batteryOptimizations) {
+        if (batteryOptimizations || !::caffeine.isInitialized) {
             qsTile.state = Tile.STATE_UNAVAILABLE
             qsTile.updateTile()
 

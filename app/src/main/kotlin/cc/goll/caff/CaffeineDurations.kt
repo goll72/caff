@@ -8,7 +8,6 @@ import java.io.FileOutputStream
 import java.io.FileNotFoundException
 
 import java.util.TreeSet
-import java.util.SortedSet
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.SerializationException
@@ -28,12 +27,10 @@ object CaffeineDurations {
         if (!::data.isInitialized) {
             try {
                 context.openFileInput(FILENAME).use {
-                    val content = it.reader().readText()
-                    data = TreeSet(Json.decodeFromString<SortedSet<Int>>(content))
+                    val content = it.reader().use { it.readText() }
+                    data = TreeSet(Json.decodeFromString<Array<Int>>(content).toList())
                 }
             } catch (e: FileNotFoundException) {
-                setDefault()
-            } catch (e: SerializationException) {
                 setDefault()
             } catch (e: IllegalArgumentException) {
                 setDefault()
@@ -45,8 +42,8 @@ object CaffeineDurations {
 
     fun save(context: Context) {
         context.openFileOutput(FILENAME, Context.MODE_PRIVATE).use {
-            val serialized = Json.encodeToString<SortedSet<Int>>(data)
-            it.writer().write(serialized)
+            val serialized = Json.encodeToString<Array<Int>>(data.toTypedArray())
+            it.writer().use { it.write(serialized) }
         }
     }
 }

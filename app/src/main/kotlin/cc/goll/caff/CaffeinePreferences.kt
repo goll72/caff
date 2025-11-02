@@ -8,13 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.derivedStateOf
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
@@ -30,7 +27,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.ripple
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -97,6 +93,11 @@ class CaffeinePreferences : ComponentActivity() {
             }
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        CaffeineDurations.save(this)
+    }
 }
 
 
@@ -135,6 +136,13 @@ private const val MAX_DURATION = 55 * 60
 private const val DURATION_STEP = 5 * 60
 
 
+private fun Modifier.ripple(): Modifier =
+    Modifier.indication(
+        remember { MutableInteractionSource() },
+        androidx.compose.material3.ripple()
+    )
+
+
 @Composable
 fun PreferencesDialog(durations: ObservableSet<Int>) {
     var currentDuration: Int by rememberSaveable { mutableStateOf(5 * 60) }
@@ -144,8 +152,6 @@ fun PreferencesDialog(durations: ObservableSet<Int>) {
             durations.contains(currentDuration)
         }
     }
-
-    WindowInsets
 
     Column(
         modifier = Modifier
@@ -162,7 +168,7 @@ fun PreferencesDialog(durations: ObservableSet<Int>) {
             IconButton(
                 onClick = { currentDuration -= DURATION_STEP  },
                 enabled = currentDuration > MIN_DURATION,
-                modifier = Modifier.indication(remember { MutableInteractionSource() }, ripple())
+                modifier = Modifier.ripple()
             ) {
                 Icon(
                     modifier = Modifier.rotate(180f),
@@ -176,13 +182,13 @@ fun PreferencesDialog(durations: ObservableSet<Int>) {
                 text = HumanReadableTime(currentDuration).toString(),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.primary, 
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 24.dp)
             )
     
             IconButton(
                 onClick = { currentDuration += DURATION_STEP },
                 enabled = currentDuration < MAX_DURATION,
-                modifier = Modifier.indication(remember { MutableInteractionSource() }, ripple())
+                modifier = Modifier.ripple()
             ) {
                 Icon(
                     painter = painterResource(R.drawable.arrow_forward_ios),
@@ -199,7 +205,7 @@ fun PreferencesDialog(durations: ObservableSet<Int>) {
             Button(
                 onClick = { durations.remove(currentDuration) },
                 enabled = durationWasAdded,
-                modifier = Modifier.indication(remember { MutableInteractionSource() }, ripple())
+                modifier = Modifier.ripple()
             ) {
                 Text("Remove")
             }
@@ -207,7 +213,7 @@ fun PreferencesDialog(durations: ObservableSet<Int>) {
             Button(
                 onClick = { durations.add(currentDuration) },
                 enabled = !durationWasAdded,
-                modifier = Modifier.indication(remember { MutableInteractionSource() }, ripple())
+                modifier = Modifier.ripple()
             ) {
                 Text("Add")
             }
