@@ -28,6 +28,9 @@
             android:name=".CaffeinePreferences"
             android:exported="false"
             android:label="@string/act_prefs_label"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:persistableMode="persistNever"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
