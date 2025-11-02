@@ -9,28 +9,32 @@ import android.graphics.drawable.Icon
 
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+
+import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
-import java.util.SortedSet
+import java.util.TreeSet
 import java.util.Timer
 
-
-private val CAFFEINE_DURATIONS: SortedSet<Int> =
-        sortedSetOf(5 * 60, 10 * 60, 30 * 60, Int.MAX_VALUE)
-
-// Maximum number of retries when waiting for
-// @class CaffeineService after a click event
-private const val MAX_RETRIES: Int = 4
+import cc.goll.caff.utils.HumanReadableTime
 
 
 class CaffeineTileService : TileService() {
-    // XXX: handle cases where this isn't set
     private lateinit var caffeine: CaffeineService
     private var bound: Boolean = false
+
+    // If Android is optimizing battery usage for the app,
+    // we won't be able to start @class CaffeineService
+    private var batteryOptimizations: Boolean = false
+
+    private val durations: TreeSet<Int> by lazy {
+        CaffeineDurations.get(this)
+    }
 
     private val conn: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -38,20 +42,9 @@ class CaffeineTileService : TileService() {
 
             caffeine = binder.getService()
             bound = true
-            
-            val acquired = caffeine.acquiredFor
 
-            if (acquired != null && CAFFEINE_DURATIONS.contains(acquired)) {
-                // NOTE: can be improved from O(n) to O(log n) by using
-                // @fun headSet and @fun tailSet; for now this will do
-                do {
-                    val it = iter.next()
-
-                    val found: Boolean = when (it) {
-                        is Duration.Active -> it.duration == acquired
-                        else -> false
-                    }
-                } while (!found)
+            caffeine.acquiredFor.let {
+                iter.reset(it)
             }
 
             updateTile()
@@ -71,34 +64,38 @@ class CaffeineTileService : TileService() {
 
 
     // Iterator adapter over caffeine durations
-    private var iter = object : Iterator<Duration> {
-        // I'd rather call this inner but that's a Kotlin keyword
-        private var detail = CAFFEINE_DURATIONS.iterator()
+    private val iter = object : Iterator<Duration> {
+        private lateinit var inner: MutableIterator<Int>
 
         override fun hasNext(): Boolean = true
 
         override fun next(): Duration {
-            if (detail.hasNext())
-                return Duration.Active(detail.next())
+            if (!::inner.isInitialized)
+                inner = durations.iterator()
+            
+            if (inner.hasNext())
+                return Duration.Active(inner.next())
                     
-            detail = CAFFEINE_DURATIONS.iterator()
+            inner = durations.iterator()
             return Duration.Inactive()
         }
 
+        // Resets the iterator
         fun reset() {
-            detail = CAFFEINE_DURATIONS.iterator()
+            inner = durations.iterator()
+        }
+
+        // Resets the iterator, starting from the next item after @val duration
+        fun reset(duration: Int?) {
+            if (duration != null && durations.contains(duration)) {
+                inner = durations.tailSet(duration).iterator()
+                inner.next()
+            } else {
+                reset()
+            }
         }
     }
-    
 
-    private class HumanReadableTime(t: Int) {
-        private val t: Int = t;
-
-        fun get(): Int = t;
-        
-        override fun toString(): String =
-            "%02d:%02d".format(t / 60, t % 60);
-    }
 
     private fun getRemaining(): HumanReadableTime? {
         val acquired = caffeine.acquiredFor
@@ -119,10 +116,9 @@ class CaffeineTileService : TileService() {
     
 
     private fun updateTile() {
-        qsTile.label = "Caffeine"
-
         if (caffeine.acquiredFor != null) {
-            qsTile.subtitle = getRemaining()?.toString() ?: "Infinite"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                qsTile.subtitle = getRemaining()?.toString() ?: getString(R.string.qs_tile_infinite)
 
             qsTile.state = Tile.STATE_ACTIVE
             qsTile.icon = Icon.createWithResource(this, R.drawable.local_cafe_filled)
@@ -130,8 +126,9 @@ class CaffeineTileService : TileService() {
             tileUpdateFuture = tileUpdateScheduler.schedule({ updateTile() }, 900, TimeUnit.MILLISECONDS)
         } else {
             iter.reset()
-                
-            qsTile.subtitle = "Off"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                qsTile.subtitle = getString(R.string.qs_tile_off)
 
             qsTile.state = Tile.STATE_INACTIVE
             qsTile.icon = Icon.createWithResource(this, R.drawable.local_cafe_outline)
@@ -143,6 +140,13 @@ class CaffeineTileService : TileService() {
 
     override fun onTileAdded() {
         super.onTileAdded()
+
+        qsTile.label = getString(R.string.qs_tile_label)
+
+        if (batteryOptimizations)
+            qsTile.state = Tile.STATE_UNAVAILABLE
+
+        qsTile.updateTile()
     }
 
     override fun onTileRemoved() {
@@ -152,7 +156,14 @@ class CaffeineTileService : TileService() {
 
     override fun onStartListening() { 
         super.onStartListening()
-        
+
+        val pm: PowerManager = getSystemService(POWER_SERVICE) as PowerManager
+
+        if (!pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) {
+            batteryOptimizations = true
+            return
+        }
+
         val intent = Intent(this, CaffeineService::class.java)
 
         startService(intent)
@@ -164,28 +175,28 @@ class CaffeineTileService : TileService() {
 
         tileUpdateFuture?.cancel(false)
 
-        unbindService(conn)
+        if (!batteryOptimizations)
+            unbindService(conn)
     }
 
 
     override fun onClick() {
-        for (i in 0..MAX_RETRIES) {
-            if (bound)
-                break
-
-            Thread.sleep(200)
-        } 
-
         super.onClick()
 
-        // XXX: @val caffeine may not be set even after waiting
+        if (batteryOptimizations) {
+            qsTile.state = Tile.STATE_UNAVAILABLE
+            qsTile.updateTile()
+
+            return
+        }
+
         caffeine.releaseWakeLock()
 
-        val it = iter.next()
-
-        when (it) {
-            is Duration.Active -> caffeine.acquireWakeLockFor(it.duration)
-        }
+        iter.next().let {
+            if (it is Duration.Active) {
+                caffeine.acquireWakeLockFor(it.duration)
+            }
+        } 
 
         updateTile()
     }

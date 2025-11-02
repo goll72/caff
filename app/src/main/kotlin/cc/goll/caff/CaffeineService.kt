@@ -18,9 +18,11 @@ private lateinit var WAKE_LOCK: PowerManager.WakeLock;
 private const val S_TO_MS: Long = 1000
 
 
-// This service is intended to be started explicitly by
-// @class CaffeineTileService and will stop itself when
-// the caffeine timeout expires.
+// This service must be explicitly started using @fun startService,
+// bound to using @fun bindService and then unbound using @fun unbindService.
+//
+// It will stop itself automatically when no one is
+// bound to it and it isn't holding any wake locks.
 class CaffeineService : Service() {
     private val binder = CaffeineBinder()
 
@@ -71,7 +73,7 @@ class CaffeineService : Service() {
     var elapsed: Int = 0
         private set
 
-    // For how long the current wake lock was acquired originally,
+    // For how long the current wake lock was acquired originally:
     // @val null if there is no wake lock being held;
     // @val Int.MAX_VALUE if the wake lock was acquired indefinitely
     var acquiredFor: Int? = null
