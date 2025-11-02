@@ -1,9 +1,7 @@
 package cc.goll.caff.utils
 
 
-class HumanReadableTime(t: Int) {
-    private val t: Int = t;
-
+class HumanReadableTime(private val t: Int) {
     fun get(): Int = t;
     
     override fun toString(): String =
