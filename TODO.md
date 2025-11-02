@@ -4,7 +4,7 @@
 
  - [x] Allow adding custom durations/removing existing ones
 
-       - [ ] Persist duration changes
+       - [x] Persist duration changes
 
  - [ ] Change sleep interval dynamically in `CaffeineService`
        to improve battery usage (impact hasn't been measured)
