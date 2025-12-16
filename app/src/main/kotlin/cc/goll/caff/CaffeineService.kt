@@ -69,6 +69,9 @@ class CaffeineService : Service() {
     }
 
 
+    // Whether this service should keep running if a caffeine timer runs out
+    var persist: Boolean = false
+
     // How much time has elapsed since the wake lock was acquired
     var elapsed: Int = 0
         private set
@@ -110,7 +113,7 @@ class CaffeineService : Service() {
                 }
 
                 override fun onFinish() {
-                    releaseWakeLock(true)
+                    releaseWakeLock(!persist)
                 }
             }.start()
         }

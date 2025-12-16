@@ -47,6 +47,8 @@ class CaffeineTileService : TileService() {
                 iter.reset(it)
             }
 
+            caffeine.persist = true
+
             updateTile()
         }
 
@@ -177,6 +179,9 @@ class CaffeineTileService : TileService() {
 
         if (!batteryOptimizations)
             unbindService(conn)
+
+        if (::caffeine.isInitialized)
+            caffeine.persist = false
     }
 
 
