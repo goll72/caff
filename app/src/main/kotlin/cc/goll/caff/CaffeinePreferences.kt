@@ -55,9 +55,7 @@ import java.util.TreeSet
 import cc.goll.caff.utils.HumanReadableTime
 
 
-// XXX
 private val DarkColors = darkColorScheme()
-
 private val LightColors = lightColorScheme()
 
 
