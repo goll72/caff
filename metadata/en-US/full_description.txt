@@ -1,0 +1,6 @@
+Caff provides a quick settings tile that allows the display to be kept on for an extended period of time.
+By tapping the tile, it is possible to toggle caffeine mode and cycle between different preset durations. The tile also serves as a countdown timer when caffeine is enabled.
+By long-pressing it, a preferences menu is shown, allowing the user to choose which durations will be cycled through.
+Additionally, there is an "infinite" mode, which will keep the display on indefinitely.
+<p><b>Note</b></p>
+You may have to disable battery optimizations for the app to work.

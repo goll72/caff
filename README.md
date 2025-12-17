@@ -2,8 +2,14 @@ Caff
 ====
 
 Caff is a minimal Android application that provides a quick settings tile
-implementing Caffeine Mode functionality inspired by LineageOS so that it
-can be used on other Android operating systems.
+implementing Caffeine Mode functionality (similar to LineageOS).
+
+## Usage
+
+Tapping the quick settings tile will toggle caffeine and cycle through
+different durations. If the tile is unavailable, you will have to disable
+battery optimizations (see [notes](#notes)). Long-pressing the tile will
+show a preferences menu, where custom durations can be added/removed.
 
 ## Building
 
@@ -24,6 +30,16 @@ $ gradle build
 ```
 
 The APK will be available in `app/build/outputs/apk/`.
+
+## Screenshots
+
+![Caffeine disabled](./metadata/en-US/images/phoneScreenshots/1.png)
+
+![Caffeine enabled](./metadata/en-US/images/phoneScreenshots/2.png)
+
+![Infinite duration](./metadata/en-US/images/phoneScreenshots/3.png)
+
+![Preferences menu](./metadata/en-US/images/phoneScreenshots/4_preferences.png)
 
 ## Notes
 

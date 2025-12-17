@@ -66,6 +66,7 @@
               pkgs.lemminx
               pkgs.jdt-language-server
               pkgs.kotlin-language-server
+              pkgs.fdroidserver
 
               pkgs.gradle
               composition.androidsdk

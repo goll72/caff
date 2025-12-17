@@ -1,0 +1,6 @@
+Caff permite manter a tela ligada por mais tempo. Adicionando o <i>tile</i> no menu <i>Quick settings</i>, ele pode ser usado para habilitar/desabilitar o modo cafeína e trocar entre diferentes durações.
+O <i>tile</i> pode ser pressionado para abrir uma tela de preferências, onde durações customizadas podem ser adicionadas. O <i>tile</i> também mostra o tempo restante.
+Além disso, também há um modo "infinito", que irá manter a tela ligada por um período indeterminado.
+<p><b>Obs.</b></p>
+Pode ser necessário desabilitar otimizações de uso de bateria para que o aplicativo funcione.
+

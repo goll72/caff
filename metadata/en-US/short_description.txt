@@ -1,0 +1,1 @@
+Quick settings tile providing caffeine mode functionality (keep display on)
