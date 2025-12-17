@@ -42,10 +42,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = "testkey"
-            keyPassword = "123456"
-            storeFile = file("testkey.jks")
-            storePassword = "123456"
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+            storeFile = file(System.getenv("KEYSTORE_FILE"))
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
         }
     }
 

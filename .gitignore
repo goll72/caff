@@ -5,3 +5,6 @@ gradle.properties
 
 build
 app/build
+
+.env
+*.jks

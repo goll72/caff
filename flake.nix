@@ -80,6 +80,10 @@
               ln -sf ${gradleProperties} gradle.properties
               git update-index --skip-worktree gradle.properties
 
+              set -o allexport
+              [ -f .env ] && . .env
+              set +o allexport
+
               shopt -s globstar
             '' + lib.optionalString (system != "x86_64-linux") ''
 
