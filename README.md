@@ -47,3 +47,10 @@ For the app to work properly in Android 12 or later, you
 will have to disable battery optimizations for the app
 (go to `App info` $\rightarrow$ `App battery usage` and
 set it to `Unrestricted`).
+
+This app only supports Android 8 or later and it is intended
+to be very minimal. If you want support for older versions of
+Android or a more featureful option, check out [Caffeinate](https://github.com/abdalmoniem/Caffeinate).
+Feel free to open an issue or send a PR for stuff like new
+features or fixes for quirky OEMs though, as long as they're
+not too disruptive.

@@ -67,6 +67,7 @@
               pkgs.jdt-language-server
               pkgs.kotlin-language-server
               pkgs.fdroidserver
+              pkgs.unzip
 
               pkgs.gradle
               composition.androidsdk
