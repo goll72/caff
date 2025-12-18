@@ -30,14 +30,18 @@ dependencies {
 android {
     namespace = "cc.goll.caff"
 
-    compileSdk = 36
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
     
     defaultConfig {
         applicationId = "cc.goll.caff"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 101
+        versionName = "1.1"
     }
 
     signingConfigs {
@@ -52,7 +56,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            isShrinkResources = true
+            isShrinkResources = false
             isDebuggable = false
 
             proguardFiles(
