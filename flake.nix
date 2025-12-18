@@ -74,6 +74,9 @@
             ];
 
             shellHook = ''
+              # This environment variable is deprecated, but `fdroid build` needs it
+              export ANDROID_HOME="${androidHome}"
+
               export ANDROID_SDK_ROOT="${androidHome}"
               export ANDROID_NDK_ROOT="${androidHome}/ndk-bundle"
 
