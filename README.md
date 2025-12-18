@@ -4,6 +4,12 @@ Caff
 Caff is a minimal Android application that provides a quick settings tile
 implementing Caffeine Mode functionality (similar to LineageOS).
 
+---
+
+SHA256 signing key fingerprint:
+`5F:7C:F6:44:98:2B:E2:1C:28:B6:78:FB:64:8E:D0:61:77:48:2E:2D:92:98:D6:EE:16:E8:BF:D1:9C:27:24:89`
+(GitHub releases)
+
 ## Usage
 
 Tapping the quick settings tile will toggle caffeine and cycle through
