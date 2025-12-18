@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = { self, nixpkgs }:
@@ -32,7 +32,7 @@
           mainBuildToolsVersion = "35.0.0";
 
           composition = pkgs.androidenv.composeAndroidPackages {
-            platformVersions = [ "36" ];
+            platformVersions = [ "36.1" ];
             buildToolsVersions = [ mainBuildToolsVersion ];
   
             systemImageTypes = [];
@@ -47,17 +47,10 @@
           };
 
           androidHome = "${composition.androidsdk}/libexec/android-sdk";
-          gradleProperties = pkgs.writeText "gradle.properties" ''
-            org.gradle.configuration-cache=true
-            org.gradle.parallel=true
-            org.gradle.caching=true
-            org.gradle.jvmargs=-Xmx1g -XX:MaxMetaspaceSize=512m
-
-            android.useAndroidX=true
-
-            org.gradle.java.installations.paths=${jdk}/lib/openjdk
-            android.aapt2FromMavenOverride=${androidHome}/build-tools/${mainBuildToolsVersion}/aapt2
-          '';
+          localGradleProperties = [
+            "org.gradle.java.installations.paths=${jdk}/lib/openjdk"
+            "android.aapt2FromMavenOverride=${androidHome}/build-tools/${mainBuildToolsVersion}/aapt2"
+          ];
         in
           pkgs.mkShell {
             packages = [
@@ -82,8 +75,7 @@
 
               export JAVA_HOME="${jdk}/lib/openjdk"
 
-              ln -sf ${gradleProperties} gradle.properties
-              git update-index --skip-worktree gradle.properties
+              export GRADLE_OPTS="${lib.concatMapStringsSep " " (x: "-D${x}") localGradleProperties}"
 
               set -o allexport
               [ -f .env ] && . .env
