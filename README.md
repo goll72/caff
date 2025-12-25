@@ -5,19 +5,12 @@ Caff is a minimal Android application that provides a quick settings tile
 implementing Caffeine Mode functionality (similar to LineageOS).
 
 <p align="center">
-    <a href="https://f-droid.org/packages/cc.goll.caff">
-        <img src="https://f-droid.org/badge/get-it-on.png"
-             alt="Get it on F-Droid" height="80">
-    </a>
+    <a href="https://f-droid.org/packages/cc.goll.caff"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80" /></a>
 </p>
 
 <p align="center">
-    <a href="https://f-droid.org/packages/cc.goll.caff">
-      <img alt="F-Droid Release" src="https://img.shields.io/f-droid/v/cc.goll.caff" />
-    </a>
-    <a href="https://github.com/goll72/caff/releases/latest">
-      <img alt="GitHub Release" src="https://img.shields.io/github/v/release/goll72/caff?label=github" />
-    </a>
+    <a href="https://f-droid.org/packages/cc.goll.caff"><img alt="F-Droid Release" src="https://img.shields.io/f-droid/v/cc.goll.caff" /></a>
+    <a href="https://github.com/goll72/caff/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/goll72/caff?label=github" /></a>
 </p>
 
 ---
